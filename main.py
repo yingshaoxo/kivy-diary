@@ -1,3 +1,14 @@
+#qpy:kivy
+# -*- coding: UTF-8 -*-
+
+try:
+    import sys 
+    reload(sys) 
+    sys.setdefaultencoding("utf-8")
+except:
+    pass
+
+
 from kivy.app import App
 from kivy.lang import Builder
 
@@ -11,11 +22,11 @@ Builder.load_string("""
 #:import C kivy.utils.get_color_from_hex
 	
 <Widget>:
-    font_name:'droid.ttf'
+    font_name:'data/droid.ttf'
 
 <TextInput>:
-    background_normal: 'white.jpg'
-    background_active: 'white.jpg'
+    background_normal: 'data/white.png'
+    background_active: 'data/white.png'
     padding: [root.width * 0.12]
     font_size: root.width * 0.05
     hint_text: "Input..."
@@ -45,11 +56,11 @@ Builder.load_string("""
             spacing: root.width * 0.08
             Button:
                 text: "Write"
-                background_normal: 'blue.jpg'
+                background_normal: 'data/blue.png'
                 on_release: root.current = 'write'
             Button:
                 text: "Read"
-                background_normal: 'green.jpg'
+                background_normal: 'data/green.png'
                 on_release: root.read_button()
                 
     Screen:
@@ -65,11 +76,11 @@ Builder.load_string("""
                 spacing: root.width * 0.08
                 Button:
                     text: "cancel"
-                    background_normal: 'blue.jpg'
+                    background_normal: 'data/blue.png'
                     on_release: root.cancel_button()
                 Button:
                     text: "save"
-                    background_normal: 'green.jpg'
+                    background_normal: 'data/green.png'
                     on_release: root.save_button()
 
     Screen:
@@ -86,11 +97,11 @@ Builder.load_string("""
                 spacing: root.width * 0.08
                 Button:
                     text: "last"
-                    background_normal: 'blue.jpg'
+                    background_normal: 'data/blue.png'
                     on_release: root.last_button()
                 Button:
                     text: "next"
-                    background_normal: 'green.jpg'
+                    background_normal: 'data/green.png'
                     on_release: root.next_button()
 """)
 
