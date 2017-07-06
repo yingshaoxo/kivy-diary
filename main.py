@@ -99,9 +99,9 @@ class Manager(ScreenManager):
 
     def __init__(self, **kwargs):
         self.app = App.get_running_app()
+        self.special_char = '\n\n' + '——————————————' + '\n\n'
         self.diary = self.app.read()
         self.diary_list = self.split_diary()
-        self.special_char = '\n\n' + '——————————————' + '\n\n'
         super(Manager, self).__init__(**kwargs)
     
     def split_diary(self):

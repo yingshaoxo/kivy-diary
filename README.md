@@ -1,10 +1,9 @@
 # Kivy-Diary
 Diary application made it with Kivy. Supports both Python2 and Python3.
 
-
 For testing, run this:
 
-`python3 main.py`
+`sudo python3 main.py`
 
 ![main](https://github.com/yingshaoxo/kivy-diary/raw/master/Show/main.png "main")
 
