@@ -18,6 +18,30 @@ import os
 import time
 
 
+if platform == 'android':
+    from jnius import autoclass, cast
+    from android import activity
+
+    Environment = autoclass('android.os.Environment')
+
+    def share_file(path):
+        PythonActivity = autoclass('org.renpy.android.PythonActivity')
+        Intent = autoclass('android.content.Intent')
+        String = autoclass('java.lang.String')
+        Uri = autoclass('android.net.Uri')
+        File = autoclass('java.io.File')
+
+        shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.setType('"*/*"')
+        imageFile = File(path)
+        uri = Uri.fromFile(imageFile)
+        parcelable = cast('android.os.Parcelable', uri)
+        shareIntent.putExtra(Intent.EXTRA_STREAM, parcelable)
+
+        currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
+        currentActivity.startActivity(shareIntent)
+
+
 Builder.load_string("""
 #:import C kivy.utils.get_color_from_hex
 	
@@ -129,8 +153,8 @@ class Manager(ScreenManager):
 
     def today(self):
         current = time.localtime()
-        # t = time.strftime("%b %d, 20%y", current)
-        t = time.strftime('%y年%m月20%d日', current)
+        t = time.strftime("%m %d, 20%y", current)
+        # t = time.strftime('%y年%m月20%d日', current)
         return t
         
     def last_diary_day(self):
@@ -198,8 +222,6 @@ class DiaryApp(App):
 
     def __init__(self, **kwargs):
         if platform == 'android':
-            from jnius import autoclass
-            Environment = autoclass('android.os.Environment')
             self.root_path = Environment.getExternalStorageDirectory().getAbsolutePath()
         elif platform == 'linux':
             self.root_path = os.path.expanduser('~/Documents')
