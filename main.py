@@ -130,7 +130,7 @@ class Manager(ScreenManager):
     def today(self):
         current = time.localtime()
         # t = time.strftime("%b %d, 20%y", current)
-        t = time.strftime('%y年%m月20%d日', current)
+        t = time.strftime('20%y年%m月%d日', current)
         return t
         
     def last_diary_day(self):
