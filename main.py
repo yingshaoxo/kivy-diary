@@ -75,11 +75,11 @@ Builder.load_string("""
                 padding: [root.width * 0.09]
                 spacing: root.width * 0.08
                 Button:
-                    text: "cancel"
+                    text: "Cancel"
                     background_normal: 'data/blue.png'
                     on_release: root.cancel_button()
                 Button:
-                    text: "save"
+                    text: "Save"
                     background_normal: 'data/green.png'
                     on_release: root.save_button()
 
@@ -96,11 +96,11 @@ Builder.load_string("""
                 padding: [root.width * 0.09]
                 spacing: root.width * 0.08
                 Button:
-                    text: "last"
+                    text: "Last"
                     background_normal: 'data/blue.png'
                     on_release: root.last_button()
                 Button:
-                    text: "next"
+                    text: "Next"
                     background_normal: 'data/green.png'
                     on_release: root.next_button()
 """)
@@ -227,6 +227,7 @@ class DiaryApp(App):
             f.write(text)
             
     def build(self):
+        self.bind(on_start=self.post_build_init)
         return Manager()
 
     def post_build_init(self, ev):
