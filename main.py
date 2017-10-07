@@ -39,6 +39,7 @@ Builder.load_string("""
     padding: (0, 0) # fixed in Kivy 1.8.1
     size_hint: (1, None)
     height: self.texture_size[1]
+    markup: True
 
 <Manager>:
     canvas.before: 
@@ -129,8 +130,11 @@ class Manager(ScreenManager):
 
     def today(self):
         current = time.localtime()
-        # t = time.strftime("%b %d, 20%y", current)
-        t = time.strftime('20%y年%m月%d日', current)
+        # print(time.strftime("%b", current)[-1])
+        if time.strftime("%b", current)[-1] not in list("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"):
+            t = time.strftime('20%y年%m月%d日', current)
+        else:
+            t = time.strftime("%b %d, 20%y", current)
         return t
         
     def last_diary_day(self):
@@ -168,7 +172,7 @@ class Manager(ScreenManager):
     
     def read_button(self):
         self.diary_list = self.split_diary()
-        print(self.diary_list)
+        # print(self.diary_list)
         if len(self.diary_list) == 0:
             self.ids.show.text = "Haven't anything yet!"
         else:
@@ -179,11 +183,11 @@ class Manager(ScreenManager):
 
     def last_button(self):
         if self.index <= 0:
-             #self.ids.show.text = "No more!"
-             self.current = "main"
+            #self.ids.show.text = "No more!"
+            self.current = "main"
         else:
-             self.index = self.index - 1
-             self.ids.show.text = self.diary_list[self.index]
+            self.index = self.index - 1
+            self.ids.show.text = self.diary_list[self.index]
 
     def next_button(self):
         if self.index >= self.diary_length - 1:

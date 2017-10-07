@@ -1,0 +1,3 @@
+This is an kivy application help you guys writting diary.
+
+You can find you diary.txt file in your SD-card root path.
