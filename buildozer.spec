@@ -88,7 +88,7 @@ fullscreen = 0
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE
 
 # (int) Android API to use
-android.api = 28
+android.api = 24
 
 # (int) Minimum API required
 android.minapi = 21
@@ -106,7 +106,7 @@ android.ndk = 17c
 #android.ndk_path = /SDKandNDK/android-ndk-r10e/
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
-#android.sdk_path = /SDKandNDK/android-sdk-linux/
+#android.sdk_path = ~/Android/Sdk/
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
 #android.ant_path =

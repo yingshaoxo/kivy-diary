@@ -1,0 +1,27 @@
+Categories:Writing
+License:GPL-3.0-only
+Source Code:https://github.com/yingshaoxo/kivy-diary
+Issue Tracker:https://github.com/yingshaoxo/kivy-diary/issues
+
+Summary:A diary app
+Description:
+KivyDiary is a diary writting app written by kivy, based on Python2.
+.
+
+Repo Type:git
+Repo:https://github.com/yingshaoxo/kivy-diary.git
+
+Build:1.0, 1
+    commit=1d1820aadc99bb6fc4468d209aab5fc4045884c2
+    sudo=(apt-get install -y python2.7 && \
+        apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev) || echo "something was wroung"
+    #sudo=(apt-get install -y build-essential libstdc++6 aidl) || echo "something was wroung"
+    #sudo=(pip install https://github.com/kivy/buildozer/archive/master.zip)
+    #sudo=(cp ~/.buildozer/android/platform/android-sdk-24/tools ~/.buildozer/android/platform/android-sdk-24/build-tools -fr)
+    #prebuild=buildozer init
+    build=buildozer android release
+    output=*.apk
+
+Auto Update Mode:None
+Update Check Mode:None
+Current Version:1.0
