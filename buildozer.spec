@@ -7,7 +7,7 @@ title = KivyDiary
 package.name = kivydiary
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.yingshaoxo
+package.domain = xyz.yingshaoxo
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -85,7 +85,7 @@ fullscreen = 0
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-android.permissions = INTERNET
+#android.permissions = INTERNET
 
 # (int) Android API to use
 android.api = 19
@@ -103,10 +103,10 @@ android.api = 19
 #android.private_storage = True
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
-android.ndk_path = /SDKandNDK/android-ndk-r10e/
+#android.ndk_path = /SDKandNDK/android-ndk-r10e/
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
-android.sdk_path = /SDKandNDK/android-sdk-linux/
+#android.sdk_path = /SDKandNDK/android-sdk-linux/
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
 #android.ant_path =
