@@ -1,0 +1,8 @@
+*.sh
+screenshots
+*.txt
+*.md
+*.spec
+.buildozor
+.git
+.kivy

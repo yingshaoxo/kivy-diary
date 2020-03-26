@@ -28,7 +28,7 @@ source.include_exts = py,png,ttf
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1
+version = 0.2
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = hostpython2,kivy,jnius
+requirements = python3,kivy==1.11.1,jnius
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -65,10 +65,10 @@ orientation = portrait
 # author = © Copyright Info
 
 # change the major version of python used by the app
-osx.python_version = 2
+osx.python_version = 3
 
 # Kivy version to use
-osx.kivy_version = 1.10.0
+osx.kivy_version = 1.11.1
 
 #
 # Android specific
@@ -88,25 +88,25 @@ fullscreen = 0
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE
 
 # (int) Android API to use
-android.api = 24
+android.api = 27
 
 # (int) Minimum API required
 android.minapi = 21
 
 # (int) Android SDK version to use
-android.sdk = 24
+#android.sdk = 28
 
 # (str) Android NDK version to use
-android.ndk = 17c
+#android.ndk = 17c
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
 
 # (str) Android NDK directory (if empty, it will be automatically downloaded.)
-#android.ndk_path = /SDKandNDK/android-ndk-r10e/
+android.ndk_path = /home/yingshaoxo/Android/android-ndk-r17c/
 
 # (str) Android SDK directory (if empty, it will be automatically downloaded.)
-#android.sdk_path = ~/Android/Sdk/
+android.sdk_path = /home/yingshaoxo/Android/android-sdk-28/
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
 #android.ant_path =
@@ -226,7 +226,7 @@ log_level = 2
 warn_on_root = 1
 
 # (str) Path to build artifact storage, absolute or relative to spec file
-build_dir = ~/kivy_build
+#build_dir = ~/kivy_build
 
 # (str) Path to build output (i.e. .apk, .ipa) storage
 bin_dir = .
