@@ -1,9 +1,9 @@
-#qpy:kivy
+# qpy:kivy
 # -*- coding: UTF-8 -*-
 
 try:
-    import sys 
-    reload(sys) 
+    import sys
+    reload(sys)
     sys.setdefaultencoding("utf-8")
 except:
     pass
@@ -13,6 +13,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 
 from kivy.utils import platform
+import everyday_pb2
 
 import os
 import time
@@ -70,6 +71,7 @@ Builder.load_string("""
             orientation: "vertical"
             TextInput:
                 id: input
+                on_double_tap: root.on_textinput_double_tap()
             BoxLayout:
                 orientation: "horizontal"
                 size_hint: (1, 0.6)
@@ -112,21 +114,25 @@ class Manager(ScreenManager):
     def __init__(self, **kwargs):
         self.app = App.get_running_app()
         self.special_char = '\n\n' + '——————————————' + '\n\n'
-        self.diary = self.app.read()
+        self.everyday = self.app.everyday
         self.diary_list = self.split_diary()
         super(Manager, self).__init__(**kwargs)
-    
+
     def split_diary(self):
-        if self.diary == '':
-            return []
-        list_ = self.diary.split(self.special_char)
+        list_ = []
+        for oneday in self.everyday.oneday:
+            sub_text_list = [content.text for content in oneday.content]
+            sub_text_list.insert(0, oneday.date)
+            text = self.special_char.join(sub_text_list)
+            list_.append(text)
         return list_
-    
+
     def diary_date(self):
-        if self.diary_list:
-            return [text.split('\n')[0] for text in self.split_diary()]
-        else:
-            return []
+        list_ = []
+        for oneday in self.everyday.oneday:
+            date = oneday.date
+            list_.append(date)
+        return list_
 
     def today(self):
         current = time.localtime()
@@ -136,40 +142,39 @@ class Manager(ScreenManager):
         else:
             t = time.strftime("%b %d, 20%y", current)
         return t
-        
+
     def last_diary_day(self):
         if self.diary_list:
             return self.diary_date()[-1]
         else:
             return ''
-        
-    def text_fmt(self, text):
-        return self.today() + '\n' * 3 + text
 
     def save(self):
-        diary = self.app.read()
         text = self.ids.input.text.strip(' \n')
         if text == '':
             return
-        if self.today() == self.last_diary_day():
-            diary += '\n' * 2
-            diary += text
-        elif diary == '':
-            diary = self.text_fmt(text)
-        else:
-            diary += self.special_char + self.text_fmt(text)
-        self.app.write(diary)
-        self.diary = diary
-        
+        if self.today() == self.last_diary_day(): # same day
+            content = self.everyday.oneday[-1].content.add()
+            content.text = text
+        else: # new day
+            oneday = self.everyday.oneday.add()
+            oneday.date = self.today()
+            content = oneday.content.add()
+            content.text = text
+        self.app.write(self.everyday.SerializeToString())
+
+    def on_textinput_double_tap(self):
+        text = self.ids.input.paste()
+
     def cancel_button(self):
         self.ids.input.text = ''
-        self.current = 'main'   
-         
+        self.current = 'main'
+
     def save_button(self):
         self.save()
         self.ids.input.text = ''
         self.current = "main"
-    
+
     def read_button(self):
         self.diary_list = self.split_diary()
         # print(self.diary_list)
@@ -202,9 +207,11 @@ class DiaryApp(App):
 
     def __init__(self, **kwargs):
         if platform == 'android':
-            from jnius import autoclass
-            Environment = autoclass('android.os.Environment')
-            self.root_path = Environment.getExternalStorageDirectory().getAbsolutePath()
+            from jnius import autoclass, cast
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
+            context = cast('android.content.Context', currentActivity.getApplicationContext())
+            self.root_path = context.getExternalFilesDir(None).getAbsolutePath()
         elif platform == 'linux':
             self.root_path = os.path.expanduser('~/Documents')
         elif platform == 'win':
@@ -215,21 +222,26 @@ class DiaryApp(App):
         else:
             self.root_path = os.path.dirname(os.path.abspath('.'))
 
+        self.everyday = everyday_pb2.EveryDay()
         self.diary_path = os.path.join(self.root_path, 'diary.txt')
         if os.path.exists(self.diary_path) == False:
-            self.write('')
+            saved_bytes = self.everyday.SerializeToString()
+            self.write(saved_bytes)
+        else:
+            saved_bytes = self.read()
+            self.everyday.MergeFromString(saved_bytes)
 
         super(DiaryApp, self).__init__(**kwargs)
-    
+
     def read(self):
-        with open(self.diary_path, 'r') as f:
-            text = f.read()
-        return text.strip(' \n')
-    
-    def write(self, text):
-        with open(self.diary_path, 'w') as f:
-            f.write(text)
-            
+        with open(self.diary_path, 'rb') as f:
+            byte = f.read()
+        return byte
+
+    def write(self, byte):
+        with open(self.diary_path, 'wb') as f:
+            f.write(byte)
+
     def build(self):
         self.bind(on_start=self.post_build_init)
         return Manager()
@@ -239,15 +251,17 @@ class DiaryApp(App):
         EventLoop.window.bind(on_keyboard=self.hook_keyboard)
 
     def hook_keyboard(self, window, key, *largs):
-        if key == 27: # back key
+        if key == 27:  # back key
             if self.root.current == 'main':
                 exit()
             self.root.current = 'main'
             return True
+        """
         elif key == 319 or key == 1073741942: # munu key
             if platform == 'android':
                 share_file(self.diary_path)
             return True
+        """
 
 
 DiaryApp().run()

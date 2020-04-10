@@ -46,5 +46,35 @@ export ANDROIDNDK="/home/user/host/Android/Sdk/ndk/21.0.6113669"
 export ANDROIDAPI="29"  # Target API version of your application
 export NDKAPI="21"  # Minimum supported API version of your application
 
-p4a apk --private . --package=xyz.yingshaoxo.kivydiary --name "KivyDiary" --version 0.2 --bootstrap=sdl2 --requirements=python3,kivy,jnius --blacklist-requirements=sqlite3,libffi,openssl --orientation=portrait --add-source . --presplash=./data/flash.png --icon=./data/icon.png --permission INTERNET --permission WRITE_EXTERNAL_STORAGE
+p4a apk --private . --package=xyz.yingshaoxo.kivydiary --name "KivyDiary" --version 0.3 --bootstrap=sdl2 --requirements=python3,kivy,jnius,protobuf --blacklist-requirements=sqlite3,libffi,openssl --window --orientation=portrait --add-source . --presplash=./data/flash.png --icon=./data/icon.png --permission INTERNET --permission WRITE_EXTERNAL_STORAGE --debug
+```
+
+##### 6. Sign it
+```
+apksigner sign --ks yingshaoxo.keystore --out app.apk unnamed_dist_1__armeabi-v7a-release-unsigned-0.3-.apk
+```
+
+##### Error handling
+After `p4a clean_dist`, the error message you get is:
+```
+/bin/cp: missing destination file operand after 'libs/armeabi-v7a'
+```
+
+How to fix:
+```
+vim /home/user/app/pythonforandroid/bootstrap.py
+```
+```
+def distribute_libs(self, arch, src_dirs, wildcard='*', dest_dir="libs"):
+    '''Copy existing arch libs from build dirs to current dist dir.'''
+    info('Copying libs')
+    tgt_dir = join(dest_dir, arch.arch)
+    ensure_dir(tgt_dir)
+    for src_dir in src_dirs:
+        libs = glob.glob(join(src_dir, wildcard))
+        if libs:
+            shprint(sh.cp, '-a', *libs, tgt_dir)
+        else:
+            debug("No libs found at {}".format(src_dirs))
+            debug("We were trying to copy this folders files to {}".format(tgt_dir))
 ```
