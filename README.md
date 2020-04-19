@@ -46,12 +46,19 @@ export ANDROIDNDK="/home/user/host/Android/Sdk/ndk/21.0.6113669"
 export ANDROIDAPI="29"  # Target API version of your application
 export NDKAPI="21"  # Minimum supported API version of your application
 
-p4a apk --private . --package=xyz.yingshaoxo.kivydiary --name "KivyDiary" --version 0.3 --bootstrap=sdl2 --requirements=python3,kivy,jnius,protobuf --blacklist-requirements=sqlite3,libffi,openssl --window --orientation=portrait --add-source . --presplash=./data/flash.png --icon=./data/icon.png --permission INTERNET --permission WRITE_EXTERNAL_STORAGE --debug
+p4a apk --private . --package=xyz.yingshaoxo.kivydiary --name "KivyDiary" --version 0.2 --bootstrap=sdl2 --requirements=python3,kivy,jnius,protobuf --blacklist-requirements=sqlite3,libffi,openssl --window --orientation=portrait --add-source . --presplash=./data/flash.png --icon=./data/icon.png --permission INTERNET --permission WRITE_EXTERNAL_STORAGE --debug
 ```
 
-##### 6. Sign it
+##### 6. Reuse it
 ```
-apksigner sign --ks yingshaoxo.keystore --out app.apk unnamed_dist_1__armeabi-v7a-release-unsigned-0.3-.apk
+docker start kivy
+docker exec -it kivy /bin/bash
+source venv/bin/activate && cd ../host/app
+```
+
+##### 7. Sign it
+```
+apksigner sign --ks yingshaoxo.keystore --out kivydiary.apk unnamed_dist_1__armeabi-v7a-release-unsigned-0.2-.apk
 ```
 
 ##### Error handling
