@@ -94,7 +94,7 @@ public class PythonUtil {
 ```
 
 
-### PythonActivity.java
+### PythonActivity.java (For upload)
 /home/user/app/pythonforandroid/bootstraps/webview/build/src/main/java/org/kivy/android/PythonActivity.java
 
 https://stackoverflow.com/questions/36410012/android-cant-upload-images-using-webview
@@ -762,4 +762,24 @@ class WebViewLoaderMain implements Runnable {
         WebViewLoader.testConnection();
     }
 }
+```
+
+
+### PythonUtil.java (For download)
+/home/user/app/pythonforandroid/bootstraps/webview/build/src/main/java/org/kivy/android/PythonActivity.java
+
+https://stackoverflow.com/questions/10069050/download-file-inside-webview
+
+```
+import android.webkit.DownloadListener;
+
+mWebView.setDownloadListener(new DownloadListener() {
+    public void onDownloadStart(String url, String userAgent,
+                String contentDisposition, String mimetype,
+                long contentLength) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
+});
 ```

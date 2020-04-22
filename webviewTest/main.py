@@ -1,5 +1,5 @@
 from data import Data
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_cors import CORS
 import json
 from datetime import datetime
@@ -92,6 +92,11 @@ def get_today_message():
     request_json = request.get_json()
     print(my_data.get_todays_data())
     return json.dumps(my_data.get_todays_data())
+
+
+@app.route('/api/v1/download', methods=['GET'])
+def download_it():
+    return send_file(my_data.SQL_DATA_FILE, as_attachment=True)
 
 
 if __name__ == "__main__":
