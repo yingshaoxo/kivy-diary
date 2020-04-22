@@ -1,3 +1,4 @@
+from data import Data
 from flask import Flask, request
 from flask_cors import CORS
 import json
@@ -18,10 +19,8 @@ try:
     currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
     context = cast('android.content.Context', currentActivity.getApplicationContext())
     ROOT_PATH = context.getExternalFilesDir(None).getAbsolutePath()
-    FILE_PATH = os.path.join(ROOT_PATH, "everyday.txt")
 except Exception as e:
     ROOT_PATH = "."
-    FILE_PATH = os.path.join(ROOT_PATH, "everyday.txt")
 
 
 #DEBUG = False
@@ -44,12 +43,7 @@ def show_image(base64_string):
     # im.show()
 
 
-everyday = everyday_pb2.EveryDay()
-if os.path.exists(FILE_PATH):
-    with open(FILE_PATH, "rb") as f:
-        data = f.read()
-    everyday.MergeFromString(data)
-
+my_data = Data(ROOT_PATH)
 
 app = Flask(__name__,
             static_folder='./web-build',
@@ -87,19 +81,16 @@ def upload():
                 show_image(base64_image_string)
 
             oneday.date = str(datetime.now()).split(".")[0]
-
-            everyday.oneday.extend([oneday])
-            with open(FILE_PATH, 'wb') as f:
-                f.write(everyday.SerializeToString())
-            printit(everyday)
+            my_data.save_a_day(oneday)
 
             result["status"] = "ok"
     return json.dumps(result)
 
 
-@app.route('/api/v1/get', methods=['GET'])
-async def get_today_message():
+@app.route('/api/v1/get', methods=['POST'])
+def get_today_message():
     request_json = request.get_json()
+    print(my_data.get_todays_data())
     return json.dumps(my_data.get_todays_data())
 
 
